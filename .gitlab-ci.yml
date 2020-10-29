@@ -1,0 +1,26 @@
+---
+image: hpclib/hiepacs-openmpi
+
+stages:
+  - build
+  - test
+  - analyse
+  - sonar
+  - deploy
+
+before_script:
+  - git submodule update --init --recursive
+  - source .gitlab/env.sh ${VERSION}
+  - if [ ! -z "$SPM_DIR" ]; then source $SPM_DIR/bin/spm_env.sh; fi
+  - echo "VERSION=${VERSION}"
+  - mkdir -p build
+
+include:
+  - .gitlab/common.yml
+  - .gitlab/build.yml
+  - .gitlab/test.yml
+  - .gitlab/coverage.yml
+  - .gitlab/sonarqube.yml
+  - .gitlab/pages.yml
+  - .gitlab/release.yml
+  - .gitlab/coverity.yml
